@@ -11,13 +11,12 @@ class ShortenComponent extends Object
     public $kwnApiKey; // obtain from kwn.me/api?act=key
 
     public $yourlsDomain; // the domain YOURLS is installed on
-    public $yourlsFormat;  // json, xml, simple 
-    
+    public $yourlsFormat; // json, xml, simple
+
     public $googleDomain; // Google API's URL
     public $googleApiKey; // obtain from https://code.google.com/apis/console/
-    
-    
-    
+
+
     /**
      * ShortenComponent::shorten()
      * 
@@ -32,18 +31,24 @@ class ShortenComponent extends Object
      * @example http://onemorefunction.com/blog/examples/shorten
      * @license BSD - https://github.com/MadMikeyB/CakePHP-Scrapbook/blob/master/LICENSE
      */
-     
+
     function shorten($longurl, $service, $options = array())
     {
-        
+
         if (!empty($longurl)) {
 
             if ($service == 'kwnme') {
                 // define all settings
-                $this->kwnApiKey = 'REPLACEME'; // get from kwn.me/api?act=key
-                $this->kwnDomain = 'kwn.me'; // can be kwn.me or quicklink.me
+                if (empty($options['kwn'])) { // check if the user has passed any args with the shorten func
+                    $this->kwnApiKey = 'REPLACEME'; // get from kwn.me/api?act=key
+                    $this->kwnDomain = 'kwn.me'; // can be kwn.me or quicklink.me
+                } else {
+                    $this->kwnApiKey = $options['kwn']['ApiKey'];
+                    $this->kwnDomain = $options['kwn']['Domain'];
+                }
                 // get stuff done
-                $kwnmeshortenedURL = file_get_contents("http://{$this->kwnDomain}/api.php?act=shorten&key={$this->kwnApiKey}&opt=text&url=" . urlencode($longurl) . "&type=plain&recycle=true");
+                $kwnmeshortenedURL = file_get_contents("http://{$this->kwnDomain}/api.php?act=shorten&key={$this->kwnApiKey}&opt=text&url=" .
+                    urlencode($longurl) . "&type=plain&recycle=true");
                 if (!empty($kwnmeshortenedURL)) {
                     return $kwnmeshortenedURL;
                 } else {
@@ -51,11 +56,21 @@ class ShortenComponent extends Object
                 }
             }
 
+            /**
+             * @example $this->Shorten->shorten('http://onemorefunction.com', 'bitly', array('bitly', array('Login' => 'REPLACEME', 'ApiKey' => 'REPLACEME', 'Format' => 'txt')));
+             **/
+
             if ($service == 'bitly') {
                 // define all settings
-                $this->bitlyLogin = 'REPLACEME'; // https://bitly.com/a/your_api_key
-                $this->bitlyApiKey = 'REPLACEME'; // https://bitly.com/a/your_api_key
-                $this->bitlyFormat = 'txt'; // txt, json or xml
+                if (empty($options['bitly'])) { // check if the user has passed any args with the shorten func
+                    $this->bitlyLogin = 'REPLACEME'; // https://bitly.com/a/your_api_key
+                    $this->bitlyApiKey = 'REPLACEME'; // https://bitly.com/a/your_api_key
+                    $this->bitlyFormat = 'txt'; // txt, json or xml
+                } else { // args passed?
+                    $this->bitlyLogin = $options['bitly']['Login'];
+                    $this->bitlyApiKey = $options['bitly']['ApiKey'];
+                    $this->bitlyFormat = $options['bitly']['Format'];
+                }
                 // get stuff done
                 $bitlyshortenedURL = file_get_contents("http://api.bitly.com/v3/shorten?login={$this->bitlyLogin}&apiKey={$this->bitlyApiKey}&longUrl={$longurl}&format={$this->bitlyFormat}");
                 if (!empty($bitlyshortenedURL)) {
@@ -64,13 +79,14 @@ class ShortenComponent extends Object
                     return 'error';
                 }
             }
-            
+
             if ($service == 'yourls') {
                 // define all settings
-                if (isset($options['domain'])) {
-                    $this->yourlsDomain = $options['domain'];
-                } else {
+
+                if (empty($options['yourls'])) { // check if the user has passed any args with the shorten func
                     $this->yourlsDomain = 'topic.to';
+                } else {
+                    $this->yourlsDomain = $options['yourls']['Domain'];
                 }
                 $this->yourlsFormat = 'simple'; // json, xml or simple
                 // get stuff done
@@ -81,25 +97,28 @@ class ShortenComponent extends Object
                     return 'error';
                 }
             }
-            
+
             if ($service == 'google') {
                 // define all settings
-                $this->googleDomain = 'https://www.googleapis.com/urlshortener/v1/url?key=';
-                $this->googleApiKey = 'REPLACEME'; // get here: https://code.google.com/apis/console/
+                if (empty($options['google'])) { // check if the user has passed any args with the shorten func
+                    $this->googleDomain = 'https://www.googleapis.com/urlshortener/v1/url?key=';
+                    $this->googleApiKey = 'REPLACEME'; // get here: https://code.google.com/apis/console/
+                } else {
+                    $this->googleDomain = $options['google']['Domain'];
+                    $this->googleApiKey = $options['google']['ApiKey'];
+                }
                 /**
                  * @link https://github.com/fabricioferracioli/CakePHP-Google-URL-Shortener-Component/blob/master/google_url_shortener.php
                  **/
                 App::import('Core', 'HttpSocket');
                 $socket = new HttpSocket();
 
-                $result = $socket->post(
-                    $this->googleDomain . $this->googleApiKey,
-                    json_encode(array('longUrl' => $longurl)),
-                    array('header' => array('Content-Type' => 'application/json'))
-                );
+                $result = $socket->post($this->googleDomain . $this->googleApiKey, json_encode(array
+                    ('longUrl' => $longurl)), array('header' => array('Content-Type' =>
+                    'application/json')));
                 $googleUrl = json_decode($result, true);
                 return $googleUrl['id'];
-                
+
             }
         }
     }
