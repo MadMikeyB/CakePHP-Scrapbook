@@ -1,6 +1,8 @@
 <?php
 
-class ShortenComponent extends Object
+App::uses('HttpSocket', 'Network/Http'); //cake 2.x
+
+class ShortenComponent extends Component
 {
     var $name = 'Shorten';
     public $bitlyLogin; // obtain from https://bitly.com/a/your_api_key
@@ -32,7 +34,7 @@ class ShortenComponent extends Object
      * @license BSD - https://github.com/MadMikeyB/CakePHP-Scrapbook/blob/master/LICENSE
      */
 
-    function shorten($longurl, $service, $options = array())
+    public function shorten($longurl, $service, $options = array())
     {
 
         if (!empty($longurl)) {
@@ -110,7 +112,7 @@ class ShortenComponent extends Object
                 /**
                  * @link https://github.com/fabricioferracioli/CakePHP-Google-URL-Shortener-Component/blob/master/google_url_shortener.php
                  **/
-                App::import('Core', 'HttpSocket');
+                //App::import('Core', 'HttpSocket'); se declara arriba para cake 2.x
                 $socket = new HttpSocket();
 
                 $result = $socket->post($this->googleDomain . $this->googleApiKey, json_encode(array
