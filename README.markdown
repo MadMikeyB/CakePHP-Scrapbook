@@ -1,6 +1,7 @@
 # README #
 ## Shorten Component ##
 Cake 2.x compatibility added
+
 For cake 2.x rename shorten.php to ShortenComponent.php
 
 A Component to facilitate easy URL Shortening for your CakePHP Application with a Component.
