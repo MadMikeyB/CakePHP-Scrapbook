@@ -7,7 +7,9 @@ A Component to facilitate easy URL Shortening for your CakePHP Application with 
 
 1] Upload shorten.php to  ```/app/controllers/components/``` 
 
-2] In your Components Array in your Controller, add Shorten, like so: ```var $components = array('Shorten')```
+2] In your Components Array in your Controller, add Shorten, like so: ```var $components = array('Shorten')``` (cake 1.3)
+
+For cake 2.x```public $components = array('Shorten');```
 
 3] Use in Controller like so: ```$this->Shorten->shorten('http://onemorefunction.com', 'bitly', array('bitly', array('Login' => 'REPLACEME', 'ApiKey' => 'REPLACEME', 'Format' => 'txt')));```
 
