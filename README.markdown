@@ -1,16 +1,13 @@
 # README #
 ## Shorten Component ##
-Cake 2.x compatibility added
-
-For cake 2.x rename shorten.php to ShortenComponent.php
+Version of CakePHP: Cake 2.x
 
 A Component to facilitate easy URL Shortening for your CakePHP Application with a Component.
 
 1] Upload shorten.php to  ```/app/controllers/components/``` 
 
-2] In your Components Array in your Controller, add Shorten, like so: ```var $components = array('Shorten')``` (cake 1.3)
+2] In your Components Array in your Controller, add Shorten, like so: ```public $components = array('Shorten')``` 
 
-For cake 2.x```public $components = array('Shorten');```
 
 3] Use in Controller like so: ```$this->Shorten->shorten('http://onemorefunction.com', 'bitly', array('bitly', array('Login' => 'REPLACEME', 'ApiKey' => 'REPLACEME', 'Format' => 'txt')));```
 
