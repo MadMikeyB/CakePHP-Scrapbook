@@ -1,6 +1,7 @@
 # README #
 ## Shorten Component ##
-Version of CakePHP: Cake 2.x
+Version of CakePHP: Cake 2.x 
+For 1.3 version, please switch to 1.3 branch
 
 A Component to facilitate easy URL Shortening for your CakePHP Application with a Component.
 
