@@ -7,7 +7,7 @@ class ShortenComponent extends Object
     public $bitlyApiKey; // obtain from https://bitly.com/a/your_api_key
     public $bitlyFormat; // json, xml, txt
 
-    public $kwnDomain; // kwn.me or quicklink.me
+    public $kwnDomain; // kwn.me or other kwn.me domain
     public $kwnApiKey; // obtain from kwn.me/api?act=key
 
     public $yourlsDomain; // the domain YOURLS is installed on
